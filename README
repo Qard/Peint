@@ -1,0 +1,10 @@
+Peint is a modular, event-based, asynchronous canvas-rendering library.
+Wow, that's a mouth full! What does it all mean? It's awesome, that's what!.
+
+It also means you can do complex rendering tasks very easily.
+You can render text, images and shapes using pixels OR percentages,
+and best of all; you can use relative origins like "right" and "bottom"!
+
+Infact, this whole page is rendered using nothing but Peint!
+The real action is in /js/init.js and the modules are well commented.
+Trying downloading the source to see how it works.
