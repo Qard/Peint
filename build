@@ -1,0 +1,133 @@
+#!/usr/bin/env node
+var fs = require('fs')
+  
+  // Parse command line options
+  , optimist = require('optimist')
+    .usage('Build Peint2.\nUsage: $0')
+    
+    // Define short aliases
+    .alias({
+      h: 'help'
+      , o: 'output'
+      , m: 'minify'
+      , t: 'text'
+      , s: 'shapes'
+      , g: 'groups'
+      , i: 'images'
+      , a: 'animations'
+      , d: 'documentation'
+    })
+
+    // Describe each option
+    .describe({
+      h: 'Show help info'
+      , o: 'File to save to'
+      , m: 'Minify output'
+      , t: 'Include text module'
+      , s: 'Include shape module'
+      , g: 'Include group module'
+      , i: 'Include image module'
+      , a: 'Include animation module'
+      , d: 'Rebuild documentation'
+    })
+    
+    // Most of the options are just boolean toggles
+    .boolean([
+      'minify'
+      , 'text'
+      , 'shapes'
+      , 'groups'
+      , 'images'
+      , 'animations'
+      , 'documentation'
+    ])
+    
+    // All toggles except minify and animations are enabled by default
+    .default({
+      m: false
+      , t: true
+      , s: true
+      , g: true
+      , i: true
+      , a: false
+      , d: true
+    })
+
+  // Parse options
+  , argv = optimist.argv
+
+// Print help info and die
+if (argv.help) {
+  return optimist.showHelp()
+}
+
+// Required modules
+var files = ['core', 'klass', 'support', 'events', 'object', 'canvas', 'util']
+
+// Ensure dependencies are enabled
+argv.animations && ! argv.images && (argv.images = true)
+
+// Include optional components
+argv.text && files.push('text')
+argv.shapes && files.push('rect')
+argv.groups && files.push('group')
+argv.images && files.push('image')
+argv.animations && files.push('animation')
+
+// Read file content to list and merge
+var data = files.map(function (file) {
+  return fs.readFileSync(__dirname + '/src/peint.'+file+'.js', 'utf8')
+}).join("\n\n")
+
+function min (data) {
+  var uglify = require('uglify-js')
+    , jsp = uglify.parser
+    , pro = uglify.uglify
+
+  // Parse and compress
+  var ast = jsp.parse(data)
+  ast = pro.ast_mangle(ast)
+  ast = pro.ast_squeeze(ast)
+  return pro.gen_code(ast)
+}
+
+// Use floating option if output is empty
+argv._.length && ! argv.output && (argv.output = argv._[0])
+
+// If we have an output path, treat as single-component build
+if (argv.output) {
+  console.log('Custom build started')
+
+  // Minify
+  if (argv.minify) {
+    console.log('Minifying...')
+    data = min(data)
+  }
+
+  // Save to file or print to console
+  console.log('Writing', argv.output)
+  fs.writeFileSync(argv.output, data, 'utf8')
+
+  if (argv.documentation && ! argv.minify) {
+    console.log('Rebuilding documentation...')
+    require('child_process').exec('docco ' + argv.output, function () {})
+  }
+
+// Otherwise, rebuild all
+} else {
+  console.log('Complete build started')
+
+  console.log('Writing', __dirname + '/peint.js')
+  fs.writeFileSync(__dirname + '/peint.js', data, 'utf8')
+  
+  console.log('Minifying...')
+  console.log('Writing', __dirname + '/peint.min.js')
+  fs.writeFileSync(__dirname + '/peint.min.js', min(data), 'utf8')
+
+  if (argv.documentation) {
+    console.log('Rebuilding documentation...')
+    require('child_process').exec('docco peint.js', function () {})
+  }
+}
+
+console.log('Complete')
