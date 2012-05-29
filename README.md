@@ -1,4 +1,4 @@
-# Peint2
+# Peint
 
 This is a complete rewrite of Peint. As such, it is currently in alpha stage, so expect bugs and/or instability.
 
