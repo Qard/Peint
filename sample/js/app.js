@@ -51,12 +51,12 @@ $(function () {
 
   // Load a player animation
   var player = new Game.Animation({
-    url: './img/player.png'
+    url: './img/person.png'
     , top: 330
     , left: 100
     , animation: {
-      rows: 1
-      , cols: 13
+      rows: 8
+      , cols: 9
       , duration: 40
     }
   })
@@ -146,6 +146,21 @@ $(function () {
   var nTim, eTim, sTim, wTim
   var speed = 10
 
+  // Update player direction
+  var activeDirs = { n: false, s: false, e: false, w: false }
+  var directions = ['s','sw','w','nw','n','ne','e','se']
+  function determineDirection () {
+    var direction = ''
+    activeDirs.n && (direction += 'n')
+    activeDirs.s && (direction += 's')
+    activeDirs.e && (direction += 'e')
+    activeDirs.w && (direction += 'w')
+
+    player.set({
+      sliceY: directions.indexOf(direction) * (player.attrs.image.height / 8)
+    })
+  }
+
   // Right movement
   canvas.on('keys:down:d', function () {
     player.play()
@@ -154,10 +169,14 @@ $(function () {
         left: player.get('left') + speed
       })
     }, 1000 / 30)
+    activeDirs.e = true
+    determineDirection()
   })
   canvas.on('keys:up:d', function () {
     player.pause()
     clearInterval(eTim)
+    activeDirs.e = false
+    determineDirection()
   })
 
   // Left movement
@@ -168,10 +187,14 @@ $(function () {
         left: player.get('left') - speed
       })
     }, 1000 / 30)
+    activeDirs.w = true
+    determineDirection()
   })
   canvas.on('keys:up:a', function () {
     player.pause()
     clearInterval(wTim)
+    activeDirs.w = false
+    determineDirection()
   })
 
   // Up movement
@@ -182,10 +205,14 @@ $(function () {
         top: player.get('top') - speed
       })
     }, 1000 / 30)
+    activeDirs.n = true
+    determineDirection()
   })
   canvas.on('keys:up:w', function () {
     player.pause()
     clearInterval(nTim)
+    activeDirs.n = false
+    determineDirection()
   })
 
   // Down movement
@@ -196,10 +223,14 @@ $(function () {
         top: player.get('top') + speed
       })
     }, 1000 / 30)
+    activeDirs.s = true
+    determineDirection()
   })
   canvas.on('keys:up:s', function () {
     player.pause()
     clearInterval(sTim)
+    activeDirs.s = false
+    determineDirection()
   })
 
 
