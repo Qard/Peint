@@ -156,7 +156,6 @@ Peint.define('canvas', function (require, exports, module) {
       }
 
       var realDoc = window.parent || window
-      console.log(window)
 
       // This just passes press events through as-is.
       realDoc.addEventListener('keypress', function (e) {

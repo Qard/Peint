@@ -1,8 +1,28 @@
-* {
-  padding: 0;
-  margin: 0;
+html, body, canvas, ul { padding: 0; margin: 0; }
+html, body, canvas { overflow: hidden; outline: none; height: 100%; width: 100%; }
+body {
   overflow: hidden;
-  outline: none;
-  height: 100%;
-  width: 100%;
+  font-family: "Helvetica Neue", Helvetica, Verdana;
+  background-color: #ddd;
+  color: #555;
+  text-shadow: 0px 1px 0px rgba(255,255,255,0.6);
 }
+
+a, a:hover { color: #555; text-decoration: none; }
+iframe { width: 800px; height: 480px; border: none; }
+
+#container { width: 800px; margin: auto; }
+#menu { float: right; }
+#menu li, #menu li a { display: inline-block; }
+#menu li { background-color: #fff; }
+#menu li a { padding: 8px; }
+#menu li:hover { background-color: #555; }
+#menu li:hover a { color: #fff; text-shadow: 0px 1px 0px rgba(0,0,0,0.6); }
+
+#title { font-size: 4em; margin: 0; border-bottom: solid 4px #555; }
+#subtitle { font-size: 0.2em; padding-left: 10px; }
+
+#description { background-color: #fff; padding: 8px; }
+#frame, #description { box-shadow: 3px 3px 3px rgba(0,0,0,0.15); }
+
+#footer { margin-top: 10px; color: #888; font-size: 0.9em; }
