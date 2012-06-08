@@ -13,6 +13,15 @@ $(function () {
   canvas.fill('rgb(150,150,255)')
   canvas.start()
 
+  // Resizer
+  window.addEventListener('resize', function () {
+    console.log('resizing')
+    canvas.set({
+      width: document.body.clientWidth
+      , height: document.body.clientHeight
+    })
+  })
+
   // Profiling wrappers
   var types = ['Image', 'Group', 'Animation']
     , steps = ['_preRender', '_render', '_postRender']

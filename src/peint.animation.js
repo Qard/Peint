@@ -65,19 +65,21 @@ Peint.define('animation', function (require, exports, module) {
     // you might want to display a paused animation and jump to specific frames
     // based on external triggers.
     , next: function () {
+      var tileSize = this.attrs.image.width / this.attrs.animation.cols
       this.set({
-        sliceX: this._frame.next() * (this.attrs.image.width / this.attrs.animation.cols)
+        sliceX: this._frame.next() * tileSize
       })
     }
     , prev: function () {
+      var tileSize = this.attrs.image.width / this.attrs.animation.cols
       this.set({
-        sliceX: this._frame.prev() * (this.attrs.image.width / this.attrs.animation.cols)
+        sliceX: this._frame.prev() * tileSize
       })
     }
 
-    // Here we have the animation loop. It uses the `animation.duration` attribute
-    // to determine the time between frame steps and will continuously recall itself
-    // in a setTimeout for easily canceling in the pause helper.
+    // Here we have the animation loop. It uses the `animation.duration`
+    // attribute to determine time between frame steps and will continuously
+    // recall itself in a setTimeout for easily canceling in the pause helper.
     , _animate: function () {
       if (this.animating) {
         var self = this

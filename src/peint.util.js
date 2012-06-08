@@ -10,7 +10,11 @@ Peint.define('util', function (require, exports) {
   // jQuery-like functionality for selection, so find or polyfill.
   var $ = window.jQuery || window.Zepto || function (i, f, s) {
     f = i[0], s = i.substr(1)
-    return document['getElement' + ({ '#': 'ById', '.': 'sByClassName' }[f] || 'sByTagName')]({ '#': s, '.': s }[f] || i)
+    return document['getElement' + ({
+      '#': 'ById', '.': 'sByClassName'
+    }[f] || 'sByTagName')]({
+      '#': s, '.': s
+    }[f] || i)
   }
 
   // First, lets expose the more basic parts.

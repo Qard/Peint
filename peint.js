@@ -307,9 +307,14 @@ Peint.define('object', function (require, exports, module) {
     // You can use `isIntersecting` to detect collisions with
     // this object. It is used internally to propagate mouse events.
     , isIntersecting: function (obj) {
-      var x = obj[0], y = obj[1], w = obj[2] || 0, h = obj[3] || 0
-      if (x > this.attrs.left && (x + w) < (this.attrs.left + this.attrs.width)) {
-        if (y > this.attrs.top && (y + h) < (this.attrs.top + this.attrs.height)) {
+      var a = this.attrs
+        , x = obj[0]
+        , y = obj[1]
+        , w = obj[2] || 0
+        , h = obj[3] || 0
+
+      if (x > a.left && (x + w) < (a.left + a.width)) {
+        if (y > a.top && (y + h) < (a.top + a.height)) {
           return true
         }
       }
@@ -568,7 +573,6 @@ Peint.define('canvas', function (require, exports, module) {
       }
 
       var realDoc = window.parent || window
-      console.log(window)
 
       // This just passes press events through as-is.
       realDoc.addEventListener('keypress', function (e) {
@@ -681,7 +685,11 @@ Peint.define('util', function (require, exports) {
   // jQuery-like functionality for selection, so find or polyfill.
   var $ = window.jQuery || window.Zepto || function (i, f, s) {
     f = i[0], s = i.substr(1)
-    return document['getElement' + ({ '#': 'ById', '.': 'sByClassName' }[f] || 'sByTagName')]({ '#': s, '.': s }[f] || i)
+    return document['getElement' + ({
+      '#': 'ById', '.': 'sByClassName'
+    }[f] || 'sByTagName')]({
+      '#': s, '.': s
+    }[f] || i)
   }
 
   // First, lets expose the more basic parts.
@@ -1174,19 +1182,21 @@ Peint.define('animation', function (require, exports, module) {
     // you might want to display a paused animation and jump to specific frames
     // based on external triggers.
     , next: function () {
+      var tileSize = this.attrs.image.width / this.attrs.animation.cols
       this.set({
-        sliceX: this._frame.next() * (this.attrs.image.width / this.attrs.animation.cols)
+        sliceX: this._frame.next() * tileSize
       })
     }
     , prev: function () {
+      var tileSize = this.attrs.image.width / this.attrs.animation.cols
       this.set({
-        sliceX: this._frame.prev() * (this.attrs.image.width / this.attrs.animation.cols)
+        sliceX: this._frame.prev() * tileSize
       })
     }
 
-    // Here we have the animation loop. It uses the `animation.duration` attribute
-    // to determine the time between frame steps and will continuously recall itself
-    // in a setTimeout for easily canceling in the pause helper.
+    // Here we have the animation loop. It uses the `animation.duration`
+    // attribute to determine time between frame steps and will continuously
+    // recall itself in a setTimeout for easily canceling in the pause helper.
     , _animate: function () {
       if (this.animating) {
         var self = this

@@ -4,23 +4,44 @@
     <title>Isomap Test</title>
     <link rel="stylesheet" href="./sample/css/style.css" />
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="https://raw.github.com/Qard/hush/master/hush.js"></script>
     <script type="text/javascript">
-    window.onload = function () {
-      var frame = document.getElementById('frame')
-      var menu = document.getElementById('menu')
-      frame.height = screen.height - menu.height
-    }
+    $(function () {
+      var win = $(window)
+      win.resize(function () {
+        var frame = $('#frame')
+        var header = $('#header')
+        var footer = $('#footer')
+        frame.attr('height', win.height() - header.height() - footer.height() - 50)
+      }).resize()
+
+      var pages = new Hush({
+        '': './sample/index.html'
+        , documentation: './docs/peint.html'
+        , github: 'http://github.com/qard/peint'
+      })
+
+      Hush.start(function (hash) {
+        var url = pages.get(hash.key)
+        hash.is('remote') && location.replace(url)
+        $('#frame').attr('src', url)
+      })
+    })
     </script>
   </head>
   <body>
     <div id="container">
-      <ul id="menu">
-        <li><a href="./docs/peint.html">Documentation</a></li>
-        <li><a href="http://github.com/qard/peint">Code</a></li>
-      </ul>
-      <h1 id="title">Peint<small id="subtitle">Event-driven canvas rendering</small></h1>
-      <p id="description"><b>W, A, S, D</b> <small>to</small> move player / <b>drag mouse</b> <small>to</small> move map</p>
-      <iframe id="frame" src="./sample/index.html" tabindex="1"></iframe>
+      <div id="header">
+        <ul id="menu">
+          <li><a href="">Demo</a></li>
+          <li><a href="#documentation">Documentation</a></li>
+          <li><a href="#github[remote]">Code</a></li>
+        </ul>
+        <h1 id="title">Peint<small id="subtitle">Event-driven canvas rendering</small></h1>
+        <p id="description"><b>W, A, S, D</b> <small>to</small> move player / <b>drag mouse</b> <small>to</small> move map</p>
+      </div>
+      <iframe id="frame" tabindex="1"></iframe>
       <div id="footer">&copy;2012 <a href="http://blackcombgames.com">Blackcomb Games</a></div>
     </div>
   </body>

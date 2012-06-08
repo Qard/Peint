@@ -74,9 +74,14 @@ Peint.define('object', function (require, exports, module) {
     // You can use `isIntersecting` to detect collisions with
     // this object. It is used internally to propagate mouse events.
     , isIntersecting: function (obj) {
-      var x = obj[0], y = obj[1], w = obj[2] || 0, h = obj[3] || 0
-      if (x > this.attrs.left && (x + w) < (this.attrs.left + this.attrs.width)) {
-        if (y > this.attrs.top && (y + h) < (this.attrs.top + this.attrs.height)) {
+      var a = this.attrs
+        , x = obj[0]
+        , y = obj[1]
+        , w = obj[2] || 0
+        , h = obj[3] || 0
+
+      if (x > a.left && (x + w) < (a.left + a.width)) {
+        if (y > a.top && (y + h) < (a.top + a.height)) {
           return true
         }
       }
