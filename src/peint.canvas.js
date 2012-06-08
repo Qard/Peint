@@ -155,8 +155,11 @@ Peint.define('canvas', function (require, exports, module) {
         self.emit('keys:'+type+':'+keys.join('+'), e)
       }
 
+      var realDoc = window.parent || window
+      console.log(window)
+
       // This just passes press events through as-is.
-      window.addEventListener('keypress', function (e) {
+      realDoc.addEventListener('keypress', function (e) {
         keyTrigger('press', e)
       })
 
@@ -164,7 +167,7 @@ Peint.define('canvas', function (require, exports, module) {
       // rather than activating once like you might expect. To fix this,
       // we must store a list of currently held keys and ignore keys
       // that have already been placed in the list. 
-      window.addEventListener('keydown', function (e) {
+      realDoc.addEventListener('keydown', function (e) {
         if (!~downKeys.indexOf(e.which)) {
           downKeys.push(e.which)
           keyTrigger('down', e)
@@ -173,7 +176,7 @@ Peint.define('canvas', function (require, exports, module) {
 
       // We also need to remember to remove keys from the list of held keys
       // on `keyup` or future `keydown` events will continue to be stopped.
-      window.addEventListener('keyup', function (e) {
+      realDoc.addEventListener('keyup', function (e) {
         var index = downKeys.indexOf(e.which)
         !!~index && downKeys.splice(index, 1)
         keyTrigger('up', e)

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Isomap Test</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <style type="text/css">
+    html, body, ul { margin: 0; padding: 0; }
+    body {
+      font-family: "Helvetica Neue", Helvetica, Verdana;
+      background-color: #ddd;
+      color: #555;
+      text-shadow: 0px 1px 0px rgba(255,255,255,0.6);
+    }
+    a, a:hover { color: #555; text-decoration: none; }
+    iframe { width: 800px; height: 480px; border: none; }
+
+    #container { width: 800px; margin: auto; }
+    #menu { float: right; }
+    #menu li { display: inline-block; padding: 8px; background-color: #fff; }
+    #menu li:hover { background-color: #555; }
+    #menu li:hover a { color: #fff; text-shadow: 0px 1px 0px rgba(0,0,0,0.6); }
+
+    #title { font-size: 4em; margin: 0; border-bottom: solid 4px #555; }
+    #subtitle { font-size: 0.2em; padding-left: 10px; }
+
+    #description { background-color: #fff; padding: 8px; }
+    #frame, #description { box-shadow: 3px 3px 3px rgba(0,0,0,0.15); }
+
+    #footer { margin-top: 10px; color: #888; font-size: 0.9em; }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <ul id="menu">
+        <li><a href="docs/peint.html">Documentation</a></li>
+        <li><a href="http://github.com/qard/peint">Code</a></li>
+      </ul>
+      <h1 id="title">Peint<small id="subtitle">Event-driven canvas rendering</small></h1>
+      <p id="description"><b>W, A, S, D</b> <small>to</small> move player / <b>drag mouse</b> <small>to</small> move map</p>
+      <iframe id="frame" src="./sample/index.html" tabindex="1"></iframe>
+      <div id="footer">&copy;2012 <a href="http://blackcombgames.com">Blackcomb Games</a></div>
+    </div>
+  </body>
+</html>

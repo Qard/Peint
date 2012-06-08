@@ -13,6 +13,24 @@ $(function () {
   canvas.fill('rgb(150,150,255)')
   canvas.start()
 
+  // Profiling wrappers
+  var types = ['Image', 'Group', 'Animation']
+    , steps = ['_preRender', '_render', '_postRender']
+  _.each(types, function (type) {
+    var pre = Game[type].prototype._preRender
+    Game[type].prototype._preRender = function () {
+      console.time('Game.'+type+' render')
+      return pre.apply(this, arguments)
+    }
+
+    var post = Game[type].prototype._postRender
+    Game[type].prototype._postRender = function () {
+      var ret = post.apply(this, arguments)
+      console.timeEnd('Game.'+type+' render')
+      return ret
+    }
+  })
+
 
 
   // Make terrain and player groups
@@ -159,11 +177,17 @@ $(function () {
     player.set({
       sliceY: directions.indexOf(direction) * (player.attrs.image.height / 8)
     })
+
+    // Pause or play animation
+    if (_.include(activeDirs, true)) {
+      player.animating || player.play()
+    } else {
+      player.animating && player.pause()
+    }
   }
 
   // Right movement
   canvas.on('keys:down:d', function () {
-    player.play()
     eTim = setInterval(function () {
       player.set({
         left: player.get('left') + speed
@@ -173,7 +197,6 @@ $(function () {
     determineDirection()
   })
   canvas.on('keys:up:d', function () {
-    player.pause()
     clearInterval(eTim)
     activeDirs.e = false
     determineDirection()
@@ -181,7 +204,6 @@ $(function () {
 
   // Left movement
   canvas.on('keys:down:a', function () {
-    player.play()
     wTim = setInterval(function () {
       player.set({
         left: player.get('left') - speed
@@ -191,7 +213,6 @@ $(function () {
     determineDirection()
   })
   canvas.on('keys:up:a', function () {
-    player.pause()
     clearInterval(wTim)
     activeDirs.w = false
     determineDirection()
@@ -199,7 +220,6 @@ $(function () {
 
   // Up movement
   canvas.on('keys:down:w', function () {
-    player.play()
     nTim = setInterval(function () {
       player.set({
         top: player.get('top') - speed
@@ -209,7 +229,6 @@ $(function () {
     determineDirection()
   })
   canvas.on('keys:up:w', function () {
-    player.pause()
     clearInterval(nTim)
     activeDirs.n = false
     determineDirection()
@@ -217,7 +236,6 @@ $(function () {
 
   // Down movement
   canvas.on('keys:down:s', function () {
-    player.play()
     sTim = setInterval(function () {
       player.set({
         top: player.get('top') + speed
@@ -227,7 +245,6 @@ $(function () {
     determineDirection()
   })
   canvas.on('keys:up:s', function () {
-    player.pause()
     clearInterval(sTim)
     activeDirs.s = false
     determineDirection()

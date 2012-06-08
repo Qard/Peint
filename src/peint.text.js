@@ -48,6 +48,8 @@ Peint.define('text', function (require, exports, module) {
     // NOTE: The height adjustment only works properly with px sizes.
     , _preRender: function () {
       var ctx = this._activeCanvas._ctx, attrs = this.attrs
+
+      ctx.save()
       ctx.textBaseline = attrs.yorigin
       ctx.fillStyle = attrs.color
       _.each(props, function (v) {
@@ -66,6 +68,12 @@ Peint.define('text', function (require, exports, module) {
       var ctx = this._activeCanvas._ctx, attrs = this.attrs
       ctx.fillText(attrs.text, 0, 0)
       return Text.supr(this, '_render')
+    }
+
+    , _postRender: function () {
+      var ctx = this._activeCanvas._ctx
+      ctx.restore()
+      return Text.supr(this, '_postRender')
     }
   })
 });
